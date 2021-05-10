@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Field.h"
 
 #define SIZE 9
