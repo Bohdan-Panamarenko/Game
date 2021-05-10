@@ -10,14 +10,14 @@ void FieldWorker::traverseDownRight() {
 
 void FieldWorker::traverseDownLeft() {
 	for (int i = 0; i < SIZE; i++) {
-		for (int j = SIZE - 1; j > 0; j--) {
+		for (int j = SIZE - 1; j >= 0; j--) {
 			(this->*typeOfSeek)(i, j, debug, true);
 		}
 	}
 }
 
 void FieldWorker::traverseUpRight() {
-	for (int i = SIZE - 1; i > 0; i--) {
+	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = 0; j < SIZE; j++) {
 			(this->*typeOfSeek)(i, j, debug, true);
 		}
@@ -25,8 +25,8 @@ void FieldWorker::traverseUpRight() {
 }
 
 void FieldWorker::traverseUpLeft() {
-	for (int i = SIZE - 1; i > 0; i--) {
-		for (int j = SIZE - 1; j > 0; j--) {
+	for (int i = SIZE - 1; i >= 0; i--) {
+		for (int j = SIZE - 1; j >= 0; j--) {
 			(this->*typeOfSeek)(i, j, debug, true);
 		}
 	}
@@ -42,14 +42,14 @@ void FieldWorker::traverseRightDown() {
 
 void FieldWorker::traverseLeftDown() {
 	for (int i = 0; i < SIZE; i++) {
-		for (int j = SIZE - 1; j > 0; j--) {
+		for (int j = SIZE - 1; j >= 0; j--) {
 			(this->*typeOfSeek)(j, i, debug, true);
 		}
 	}
 }
 
 void FieldWorker::traverseRightUp() {
-	for (int i = SIZE - 1; i > 0; i--) {
+	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = 0; j < SIZE; j++) {
 			(this->*typeOfSeek)(j, i, debug, true);
 		}
@@ -57,8 +57,8 @@ void FieldWorker::traverseRightUp() {
 }
 
 void FieldWorker::traverseLeftUp() {
-	for (int i = SIZE - 1; i > 0; i--) {
-		for (int j = SIZE - 1; j > 0; j--) {
+	for (int i = SIZE - 1; i >= 0; i--) {
+		for (int j = SIZE - 1; j >= 0; j--) {
 			(this->*typeOfSeek)(j, i, debug, true);
 		}
 	}
