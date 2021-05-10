@@ -28,5 +28,8 @@ class Field {
 public:
     Field();
     void show();
-    bool check(int i = 0, int j = 0, bool isFirst = true);
+    bool checkA(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool checkB(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool checkC(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool checkD(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
 };
