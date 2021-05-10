@@ -2,7 +2,7 @@
 
 int main()
 {
-    system("chcp 1251>nul");
+    SetConsoleOutputCP(CP_UTF8);
     system("color F0");
     char answ = 'y';
     do {
