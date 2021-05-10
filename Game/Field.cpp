@@ -24,29 +24,31 @@ Field::Field() {
 void Field::show() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     for (int i = 0, j = 0; i < 9; i++) {
+        cout << ' ';
         for (j = 0; j < 9; j++) {
             SETCOLOR(els[i][j].col);
             cout << els[i][j].num << ' ';
         }
         cout << endl;
     }
-    for (int n = 0; n < 40; n++) cout << '-';
+    cout << '<';
+    for (int n = 0; n < 17; n++) cout << '-';
+    cout << '>';
     cout << endl;
 }
 
-bool Field::checkA(int i, int j, bool debug, bool isFirst) {
+bool Field::seekDownRight(int i, int j, bool debug, bool isFirst) {
     if (isFirst && els[i][j].num != 1 && els[i][j].num != 0) return false;
     if (els[i][j].col != color::black) { // проверка на пересечение
         return false;
     }
-    color colList[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
     if (els[i][j].num == 9) { // цифра дев€ть завершает цепочку
         els[i][j].col = colList[colNum];
         return true;
     }
     if (els[i][j].num == 0) { // если начальный элемент равн€етс€ нулю, то измен€ем его на единицу
         els[i][j].num = 1;
-        if (!checkA(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
+        if (!seekDownRight(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
             els[i][j].num = 0;
             return false;
         }
@@ -93,7 +95,7 @@ bool Field::checkA(int i, int j, bool debug, bool isFirst) {
             if (els[y][j].col == color::black || els[i][x].col == color::black) { // проверка на перпендикул€рное пересечение
                 if (els[y][x].col == color::black && (els[y][x].num == els[i][j].num + 1 || (isZero = (els[y][x].num == 0)))) {
                     if (isZero) els[y][x].num = els[i][j].num + 1;
-                    if (checkA(y, x, debug, false)) {
+                    if (seekDownRight(y, x, debug, false)) {
                         if (!isFirst) return true;
                         else {    // если по элементу было сформировано цепочку
                             show();
@@ -118,19 +120,18 @@ bool Field::checkA(int i, int j, bool debug, bool isFirst) {
     return false;
 }
 
-bool Field::checkB(int i, int j, bool debug, bool isFirst) {
+bool Field::seekDownLeft(int i, int j, bool debug, bool isFirst) {
     if (isFirst && els[i][j].num != 1 && els[i][j].num != 0) return false;
     if (els[i][j].col != color::black) { // проверка на пересечение
         return false;
     }
-    color colList[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
     if (els[i][j].num == 9) { // цифра дев€ть завершает цепочку
         els[i][j].col = colList[colNum];
         return true;
     }
     if (els[i][j].num == 0) { // если начальный элемент равн€етс€ нулю, то измен€ем его на единицу
         els[i][j].num = 1;
-        if (!checkB(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
+        if (!seekDownLeft(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
             els[i][j].num = 0;
             return false;
         }
@@ -177,7 +178,7 @@ bool Field::checkB(int i, int j, bool debug, bool isFirst) {
             if (els[y][j].col == color::black || els[i][x].col == color::black) { // проверка на перпендикул€рное пересечение
                 if (els[y][x].col == color::black && (els[y][x].num == els[i][j].num + 1 || (isZero = (els[y][x].num == 0)))) {
                     if (isZero) els[y][x].num = els[i][j].num + 1;
-                    if (checkB(y, x, debug, false)) {
+                    if (seekDownLeft(y, x, debug, false)) {
                         if (!isFirst) return true;
                         else {    // если по элементу было сформировано цепочку
                             show();
@@ -202,19 +203,18 @@ bool Field::checkB(int i, int j, bool debug, bool isFirst) {
     return false;
 }
 
-bool Field::checkC(int i, int j, bool debug, bool isFirst) {
+bool Field::seekUpRight(int i, int j, bool debug, bool isFirst) {
     if (isFirst && els[i][j].num != 1 && els[i][j].num != 0) return false;
     if (els[i][j].col != color::black) { // проверка на пересечение
         return false;
     }
-    color colList[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
     if (els[i][j].num == 9) { // цифра дев€ть завершает цепочку
         els[i][j].col = colList[colNum];
         return true;
     }
     if (els[i][j].num == 0) { // если начальный элемент равн€етс€ нулю, то измен€ем его на единицу
         els[i][j].num = 1;
-        if (!checkC(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
+        if (!seekUpRight(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
             els[i][j].num = 0;
             return false;
         }
@@ -261,7 +261,7 @@ bool Field::checkC(int i, int j, bool debug, bool isFirst) {
             if (els[y][j].col == color::black || els[i][x].col == color::black) { // проверка на перпендикул€рное пересечение
                 if (els[y][x].col == color::black && (els[y][x].num == els[i][j].num + 1 || (isZero = (els[y][x].num == 0)))) {
                     if (isZero) els[y][x].num = els[i][j].num + 1;
-                    if (checkC(y, x, debug, false)) {
+                    if (seekUpRight(y, x, debug, false)) {
                         if (!isFirst) return true;
                         else {    // если по элементу было сформировано цепочку
                             show();
@@ -286,19 +286,18 @@ bool Field::checkC(int i, int j, bool debug, bool isFirst) {
     return false;
 }
 
-bool Field::checkD(int i, int j, bool debug, bool isFirst) {
+bool Field::seekUpLeft(int i, int j, bool debug, bool isFirst) {
     if (isFirst && els[i][j].num != 1 && els[i][j].num != 0) return false;
     if (els[i][j].col != color::black) { // проверка на пересечение
         return false;
     }
-    color colList[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
     if (els[i][j].num == 9) { // цифра дев€ть завершает цепочку
         els[i][j].col = colList[colNum];
         return true;
     }
     if (els[i][j].num == 0) { // если начальный элемент равн€етс€ нулю, то измен€ем его на единицу
         els[i][j].num = 1;
-        if (!checkD(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
+        if (!seekUpLeft(i, j, debug)) { // если цепочка не была сформирована, возвращаем как было
             els[i][j].num = 0;
             return false;
         }
@@ -345,7 +344,7 @@ bool Field::checkD(int i, int j, bool debug, bool isFirst) {
             if (els[y][j].col == color::black || els[i][x].col == color::black) { // проверка на перпендикул€рное пересечение
                 if (els[y][x].col == color::black && (els[y][x].num == els[i][j].num + 1 || (isZero = (els[y][x].num == 0)))) {
                     if (isZero) els[y][x].num = els[i][j].num + 1;
-                    if (checkD(y, x, debug, false)) {
+                    if (seekUpLeft(y, x, debug, false)) {
                         if (!isFirst) return true;
                         else {    // если по элементу было сформировано цепочку
                             show();
