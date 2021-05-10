@@ -35,3 +35,4 @@ public:
     bool seekUpRight(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
     bool seekUpLeft(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
 };
+  

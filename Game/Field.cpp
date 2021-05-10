@@ -19,7 +19,7 @@ Field::Field() {
             els[i][j].num = fld[i][j];
         }
     }
-}
+}  
 
 void Field::show() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
