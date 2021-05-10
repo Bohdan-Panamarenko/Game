@@ -13,6 +13,11 @@ class FieldWorker : public Field {
 	void traverseDownLeft();
 	void traverseUpRight();
 	void traverseUpLeft();
+
+	void traverseRightDown();
+	void traverseLeftDown();
+	void traverseRightUp();
+	void traverseLeftUp();
 public:
 	FieldWorker() {
 		typeOfSeek = &Field::seekDownRight;
