@@ -4,7 +4,7 @@
 #include <Windows.h>
 using namespace std;
 
-enum class color { black = 0x0000, blue = 0x0001, green = 0x0002, red = 0x0004, yellow = 0x0006,  purple = 0x0005, white = 0x000f};
+enum class color { black = 0x0000, blue = 0x0001, green = 0x0002, red = 0x0004, yellow = 0x0006,  purple = 0x0005, skyBlue = 0x0003, white = 0x000f};
 
 #define SETCOLOR(COLOR) SetConsoleTextAttribute(hConsole, (WORD)(((int)(color::white) << 4) | (int)COLOR));
 
@@ -24,6 +24,7 @@ class Field {
     };
     elem els[9][9];
     int steps;
+    int colNum;
 public:
     Field();
     void show();

@@ -6,13 +6,8 @@ int main()
     system("color F0");
     Field A;
     for (int i = 8; i >= 0; i--) {
-        for (int j = 8; j >= 5; j--) {
-            A.check(i, j);
-        }
-    }
-    for (int i = 8; i >= 0; i--) {
-        for (int j = 4; j >= 0; j--) {
-            A.check(i, j);
+        for (int j = 8; j >= 0; j--) {
+            A.check(j, i);
         }
     }
 }

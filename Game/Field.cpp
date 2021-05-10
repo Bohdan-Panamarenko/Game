@@ -2,6 +2,7 @@
 
 Field::Field() {
     steps = 0;
+    colNum = 1;
     int fld[9][9] = {
     {1, 0, 6, 0, 0, 2, 0, 7, 0},
     {0, 9, 6, 6, 0, 3, 0, 5, 0},
@@ -38,8 +39,7 @@ bool Field::check(int i, int j, bool isFirst) {
     if (els[i][j].col != color::black) { // проверка на пересечение
         return false;
     }
-    static int colNum = 1;
-    color colList[6] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple };
+    color colList[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
     if (els[i][j].num == 9) { // цифра дев€ть завершает цепочку
         els[i][j].col = colList[colNum];
         return true;
@@ -54,7 +54,11 @@ bool Field::check(int i, int j, bool isFirst) {
     }
     int x = 0, y = 0, left, right, bottom, top;
     bool isZero = false;
+
+    els[i][j].col = colList[colNum];
     // размечаем границы дл€ поиска следующего элемента в цепочке
+
+    //show();
 
     if (i == 0) {
         top = 0;
@@ -86,25 +90,30 @@ bool Field::check(int i, int j, bool isFirst) {
     for (y = top; y <= bottom; y++) {
         for (x = left; x <= right; x++) {
 
-            if (els[y][x].col == color::black && (els[y][x].num == els[i][j].num + 1 || (isZero = (els[y][x].num == 0)))) {
-                if (isZero) els[y][x].num = els[i][j].num + 1;
-                if (check(y, x, false)) {
-                    els[i][j].col = colList[colNum];
-                    if (!isFirst) return true;
-                    else {    // если по элементу было сформировано цепочку
-                        show();
-                        colNum++;
-                        return true;
+            if (els[y][j].col == color::black || els[i][x].col == color::black) { // проверка на перпендикул€рное пересечение
+                if (els[y][x].col == color::black && (els[y][x].num == els[i][j].num + 1 || (isZero = (els[y][x].num == 0)))) {
+                    if (isZero) els[y][x].num = els[i][j].num + 1;
+                    if (check(y, x, false)) {
+                        if (!isFirst) return true;
+                        else {    // если по элементу было сформировано цепочку
+                            show();
+                            colNum++;
+                            return true;
+                        }
                     }
-                }
-                else if (isZero) {
-                    els[y][x].num = 0;
+                    else {
+                        
+                        if (isZero) {
+                            els[y][x].num = 0;
+                        }
+                    }
                 }
             }
 
+
         }
     }
+    els[i][j].col = color::black;
     return false;
-
 }
 
