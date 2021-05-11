@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <Windows.h>
 using namespace std;
@@ -22,14 +20,17 @@ class Field {
             this->col = col;
         }
     };
+    color colList[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
+
     elem els[9][9];
     int steps;
     int colNum;
 public:
     Field();
     void show();
-    bool checkA(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
-    bool checkB(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
-    bool checkC(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
-    bool checkD(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool seekDownRight(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool seekDownLeft(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool seekUpRight(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
+    bool seekUpLeft(int i = 0, int j = 0, bool debug = false, bool isFirst = true);
 };
+  
