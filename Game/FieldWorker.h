@@ -3,9 +3,9 @@
 #define SIZE 9
 
 class FieldWorker : public Field {
-	bool (Field::* typeOfSeek)(int i, int j, bool debug, bool isFirst);
-	void (FieldWorker::*typeOfTraverse)();
-	bool debug;
+	bool (Field::* typeOfSeek_)(int i, int j, bool bDebug, bool bIsFirst);
+	void (FieldWorker::*typeOfTraverse_)();
+	bool bDebug_;
 
 	void traverseDownRight();
 	void traverseDownLeft();
@@ -18,13 +18,13 @@ class FieldWorker : public Field {
 	void traverseLeftUp();
 public:
 	FieldWorker() {
-		typeOfSeek = &Field::seekDownRight;
-		typeOfTraverse = &FieldWorker::traverseDownRight;
-		debug = false;
+		typeOfSeek_ = &Field::seekDownRight;
+		typeOfTraverse_ = &FieldWorker::traverseDownRight;
+		bDebug_ = false;
 	}
 	void settings();
 
 	void start() {
-		(this->*typeOfTraverse)();
+		(this->*typeOfTraverse_)();
 	}
 };

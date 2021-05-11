@@ -3,7 +3,7 @@
 void FieldWorker::traverseDownRight() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek)(i, j, debug, true);
+			(this->*typeOfSeek_)(i, j, bDebug_, true);
 		}
 	}
 }
@@ -11,7 +11,7 @@ void FieldWorker::traverseDownRight() {
 void FieldWorker::traverseDownLeft() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek)(i, j, debug, true);
+			(this->*typeOfSeek_)(i, j, bDebug_, true);
 		}
 	}
 }
@@ -19,7 +19,7 @@ void FieldWorker::traverseDownLeft() {
 void FieldWorker::traverseUpRight() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek)(i, j, debug, true);
+			(this->*typeOfSeek_)(i, j, bDebug_, true);
 		}
 	}
 }
@@ -27,7 +27,7 @@ void FieldWorker::traverseUpRight() {
 void FieldWorker::traverseUpLeft() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek)(i, j, debug, true);
+			(this->*typeOfSeek_)(i, j, bDebug_, true);
 		}
 	}
 }
@@ -35,7 +35,7 @@ void FieldWorker::traverseUpLeft() {
 void FieldWorker::traverseRightDown() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek)(j, i, debug, true);
+			(this->*typeOfSeek_)(j, i, bDebug_, true);
 		}
 	}
 }
@@ -43,7 +43,7 @@ void FieldWorker::traverseRightDown() {
 void FieldWorker::traverseLeftDown() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek)(j, i, debug, true);
+			(this->*typeOfSeek_)(j, i, bDebug_, true);
 		}
 	}
 }
@@ -51,7 +51,7 @@ void FieldWorker::traverseLeftDown() {
 void FieldWorker::traverseRightUp() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek)(j, i, debug, true);
+			(this->*typeOfSeek_)(j, i, bDebug_, true);
 		}
 	}
 }
@@ -59,7 +59,7 @@ void FieldWorker::traverseRightUp() {
 void FieldWorker::traverseLeftUp() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek)(j, i, debug, true);
+			(this->*typeOfSeek_)(j, i, bDebug_, true);
 		}
 	}
 }
@@ -100,29 +100,29 @@ void FieldWorker::settings() {
 	if (trav == '1') {
 		switch (answ) {
 		case '2':
-			typeOfTraverse = &FieldWorker::traverseDownLeft;
+			typeOfTraverse_ = &FieldWorker::traverseDownLeft;
 			break;
 		case '3':
-			typeOfTraverse = &FieldWorker::traverseUpRight;
+			typeOfTraverse_ = &FieldWorker::traverseUpRight;
 			break;
 		case '4':
-			typeOfTraverse = &FieldWorker::traverseUpLeft;
+			typeOfTraverse_ = &FieldWorker::traverseUpLeft;
 			break;
 		}
 	}
 	else {
 		switch (answ) {
 		case '1':
-			typeOfTraverse = &FieldWorker::traverseRightDown;
+			typeOfTraverse_ = &FieldWorker::traverseRightDown;
 			break;
 		case '2':
-			typeOfTraverse = &FieldWorker::traverseLeftDown;
+			typeOfTraverse_ = &FieldWorker::traverseLeftDown;
 			break;
 		case '3':
-			typeOfTraverse = &FieldWorker::traverseRightUp;
+			typeOfTraverse_ = &FieldWorker::traverseRightUp;
 			break;
 		case '4':
-			typeOfTraverse = &FieldWorker::traverseLeftUp;
+			typeOfTraverse_ = &FieldWorker::traverseLeftUp;
 			break;
 		}
 	}
@@ -147,13 +147,13 @@ void FieldWorker::settings() {
 	} while (true);
 	switch (answ) {
 	case '2':
-		typeOfSeek = &Field::seekDownLeft;
+		typeOfSeek_ = &Field::seekDownLeft;
 		break;
 	case '3':
-		typeOfSeek = &Field::seekUpRight;
+		typeOfSeek_ = &Field::seekUpRight;
 		break;
 	case '4':
-		typeOfSeek = &Field::seekUpLeft;
+		typeOfSeek_ = &Field::seekUpLeft;
 		break;
 	}
 	cout << "\nУвімкнути режим ретельного огляду? (y - так, n - ні)" << endl;
@@ -168,7 +168,7 @@ void FieldWorker::settings() {
 		}
 		else break;
 	} while (true);
-	if (answ == 'y') debug = true;
+	if (answ == 'y') bDebug_ = true;
 	SETCOLOR(color::green);
 	cout << "<----- Налаштування завершено ----->" << endl;
 	SETCOLOR(color::black);
