@@ -2,7 +2,8 @@
 
 int main()
 {
-    SetConsoleOutputCP(CP_UTF8);
+    //SetConsoleOutputCP(CP_UTF8); // для компіляції з допомогою G++
+    system("chcp 1251>nul"); // для компіляції з допомогою VS
     system("color F0");
     char answ = 'y';
     do {
