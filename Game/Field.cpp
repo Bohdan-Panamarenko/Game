@@ -1,9 +1,9 @@
 #include "Field.h"
 
 Field::Field() {
-    steps_ = 0;
     colNum_ = 1;
-    int fld[9][9] = {
+    traversFunc_ = &Field::traverseDownRight;
+    const int fld[9][9] = {
     {1, 0, 6, 0, 0, 2, 0, 7, 0},
     {0, 9, 6, 6, 0, 3, 0, 5, 0},
     {4, 6, 7, 0, 8, 4, 9, 0, 0},
@@ -31,116 +31,58 @@ void Field::show() {
         }
         cout << endl;
     }
+    SETCOLOR(color::black);
     cout << '<';
     for (int n = 0; n < 17; n++) cout << '-';
     cout << '>';
     cout << endl;
 }
 
-bool Field::seekDownRight(int i, int j, bool bDebug, bool bIsFirst) {
-    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false;
-    if (els_[i][j].col_ != color::black) { // проверка на пересечение
-        return false;
-    }
-    if (els_[i][j].num_ == 9) { // цифра девять завершает цепочку
-        els_[i][j].col_ = colList_[colNum_];
-        return true;
-    }
-    if (els_[i][j].num_ == 0) { // если начальный элемент равняется нулю, то изменяем его на единицу
-        els_[i][j].num_ = 1;
-        if (!seekDownRight(i, j, bDebug)) { // если цепочка не была сформирована, возвращаем как было
-            els_[i][j].num_ = 0;
-            return false;
-        }
-        else return true;
-    }
-    int x = 0, y = 0, left, right, bottom, top;
+bool Field::checkElem(int i, int j, int x, int y, bool bDebug, bool bIsFirst)
+{
     bool bIsZero = false;
-
-    els_[i][j].col_ = colList_[colNum_];
-    // размечаем границы для поиска следующего элемента в цепочке
-
-    if (bDebug) show();
-
-    if (i == 0) {
-        top = 0;
-        bottom = 1;
-    }
-    else if (i == 8) {
-        top = 7;
-        bottom = 8;
-    }
-    else {
-        top = i - 1;
-        bottom = i + 1;
-    }
-
-    if (j == 0) {
-        left = 0;
-        right = 1;
-    }
-    else if (j == 8) {
-        left = 7;
-        right = 8;
-    }
-    else {
-        left = j - 1;
-        right = j + 1;
-    }
-
-    // поиск следующего элемента в выделенной области
-    for (y = top; y <= bottom; y++) {
-        for (x = left; x <= right; x++) {
-
-            if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // проверка на перпендикулярное пересечение
-                if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) {
-                    if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1;
-                    if (seekDownRight(y, x, bDebug, false)) {
-                        if (!bIsFirst) return true;
-                        else {    // если по элементу было сформировано цепочку
-                            show();
-                            if (bDebug) system("pause>nul");
-                            colNum_++;
-                            return true;
-                        }
-                    }
-                    else {
-                        
-                        if (bIsZero) {
-                            els_[y][x].num_ = 0;
-                        }
-                    }
+    //if (els_[y][j].col_ != els_[i][x].col_) { // проверка на перпендикулярное пересечение
+    if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // проверка на перпендикулярное пересечение
+        if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) {
+            if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1;
+            if (seek(y, x, bDebug, false)) {
+                if (!bIsFirst) return true;
+                else {    // если по элементу было сформировано цепочку
+                    show();
+                    if (bDebug) system("pause>nul");
+                    colNum_++;
+                    return true;
                 }
             }
+            else {
 
-
+                if (bIsZero) {
+                    els_[y][x].num_ = 0;
+                }
+            }
         }
     }
-    els_[i][j].col_ = color::black;
     return false;
 }
 
-bool Field::seekDownLeft(int i, int j, bool bDebug, bool bIsFirst) {
-    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false;
-    if (els_[i][j].col_ != color::black) { // проверка на пересечение
-        return false;
-    }
+bool Field::seek(int i, int j, bool bDebug, bool bIsFirst) {
+    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false; // перевірка першого елементу
     if (els_[i][j].num_ == 9) { // цифра девять завершает цепочку
         els_[i][j].col_ = colList_[colNum_];
         return true;
     }
     if (els_[i][j].num_ == 0) { // если начальный элемент равняется нулю, то изменяем его на единицу
         els_[i][j].num_ = 1;
-        if (!seekDownLeft(i, j, bDebug)) { // если цепочка не была сформирована, возвращаем как было
+        if (!seek(i, j, bDebug)) { // если цепочка не была сформирована, возвращаем как было
             els_[i][j].num_ = 0;
             return false;
         }
         else return true;
     }
     int x = 0, y = 0, left, right, bottom, top;
-    bool bIsZero = false;
+    
 
-    els_[i][j].col_ = colList_[colNum_];
+    els_[i][j].col_ = colList_[colNum_]; // призначення кольору клітинці
     // размечаем границы для поиска следующего элемента в цепочке
 
     if (bDebug) show();
@@ -172,199 +114,56 @@ bool Field::seekDownLeft(int i, int j, bool bDebug, bool bIsFirst) {
     }
 
     // поиск следующего элемента в выделенной области
-    for (y = top; y <= bottom; y++) {
-        for (x = right; x >= left; x--) {
+    if ((this->*traversFunc_)(i, j, top, bottom, left, right, bDebug, bIsFirst)) return true; // обхід дельта-поля
 
-            if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // проверка на перпендикулярное пересечение
-                if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) {
-                    if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1;
-                    if (seekDownLeft(y, x, bDebug, false)) {
-                        if (!bIsFirst) return true;
-                        else {    // если по элементу было сформировано цепочку
-                            show();
-                            if (bDebug) system("pause>nul");
-                            colNum_++;
-                            return true;
-                        }
-                    }
-                    else {
-
-                        if (bIsZero) {
-                            els_[y][x].num_ = 0;
-                        }
-                    }
-                }
-            }
-
-
-        }
-    }
-    els_[i][j].col_ = color::black;
+    els_[i][j].col_ = color::black; // відміна кольорку, якщо не було побудовано послідовність
     return false;
 }
 
-bool Field::seekUpRight(int i, int j, bool bDebug, bool bIsFirst) {
-    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false;
-    if (els_[i][j].col_ != color::black) { // проверка на пересечение
-        return false;
-    }
-    if (els_[i][j].num_ == 9) { // цифра девять завершает цепочку
-        els_[i][j].col_ = colList_[colNum_];
-        return true;
-    }
-    if (els_[i][j].num_ == 0) { // если начальный элемент равняется нулю, то изменяем его на единицу
-        els_[i][j].num_ = 1;
-        if (!seekUpRight(i, j, bDebug)) { // если цепочка не была сформирована, возвращаем как было
-            els_[i][j].num_ = 0;
-            return false;
-        }
-        else return true;
-    }
-    int x = 0, y = 0, left, right, bottom, top;
-    bool bIsZero = false;
+bool Field::traverseDownRight(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst)
+{
+    for (int y = top; y <= bottom; y++) {
+        for (int x = left; x <= right; x++) {
 
-    els_[i][j].col_ = colList_[colNum_];
-    // размечаем границы для поиска следующего элемента в цепочке
-
-    if (bDebug) show();
-
-    if (i == 0) {
-        top = 0;
-        bottom = 1;
-    }
-    else if (i == 8) {
-        top = 7;
-        bottom = 8;
-    }
-    else {
-        top = i - 1;
-        bottom = i + 1;
-    }
-
-    if (j == 0) {
-        left = 0;
-        right = 1;
-    }
-    else if (j == 8) {
-        left = 7;
-        right = 8;
-    }
-    else {
-        left = j - 1;
-        right = j + 1;
-    }
-
-    // поиск следующего элемента в выделенной области
-    for (y = bottom; y >= top; y--) {
-        for (x = left; x <= right; x++) {
-
-            if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // проверка на перпендикулярное пересечение
-                if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) {
-                    if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1;
-                    if (seekUpRight(y, x, bDebug, false)) {
-                        if (!bIsFirst) return true;
-                        else {    // если по элементу было сформировано цепочку
-                            show();
-                            if (bDebug) system("pause>nul");
-                            colNum_++;
-                            return true;
-                        }
-                    }
-                    else {
-
-                        if (bIsZero) {
-                            els_[y][x].num_ = 0;
-                        }
-                    }
-                }
-            }
-
+            if (checkElem(i, j, x, y, bDebug, bIsFirst)) return true;
 
         }
     }
-    els_[i][j].col_ = color::black;
     return false;
 }
 
-bool Field::seekUpLeft(int i, int j, bool bDebug, bool bIsFirst) {
-    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false;
-    if (els_[i][j].col_ != color::black) { // проверка на пересечение
-        return false;
-    }
-    if (els_[i][j].num_ == 9) { // цифра девять завершает цепочку
-        els_[i][j].col_ = colList_[colNum_];
-        return true;
-    }
-    if (els_[i][j].num_ == 0) { // если начальный элемент равняется нулю, то изменяем его на единицу
-        els_[i][j].num_ = 1;
-        if (!seekUpLeft(i, j, bDebug)) { // если цепочка не была сформирована, возвращаем как было
-            els_[i][j].num_ = 0;
-            return false;
-        }
-        else return true;
-    }
-    int x = 0, y = 0, left, right, bottom, top;
-    bool bIsZero = false;
+bool Field::traverseDownLeft(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst)
+{
+    for (int y = top; y <= bottom; y++) {
+        for (int x = right; x >= left; x--) {
 
-    els_[i][j].col_ = colList_[colNum_];
-    // размечаем границы для поиска следующего элемента в цепочке
-
-    if (bDebug) show();
-
-    if (i == 0) {
-        top = 0;
-        bottom = 1;
-    }
-    else if (i == 8) {
-        top = 7;
-        bottom = 8;
-    }
-    else {
-        top = i - 1;
-        bottom = i + 1;
-    }
-
-    if (j == 0) {
-        left = 0;
-        right = 1;
-    }
-    else if (j == 8) {
-        left = 7;
-        right = 8;
-    }
-    else {
-        left = j - 1;
-        right = j + 1;
-    }
-
-    // поиск следующего элемента в выделенной области
-    for (y = bottom; y >= top; y--) {
-        for (x = right; x >= left; x--) {
-
-            if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // проверка на перпендикулярное пересечение
-                if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) {
-                    if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1;
-                    if (seekUpLeft(y, x, bDebug, false)) {
-                        if (!bIsFirst) return true;
-                        else {    // если по элементу было сформировано цепочку
-                            show();
-                            if (bDebug) system("pause>nul");
-                            colNum_++;
-                            return true;
-                        }
-                    }
-                    else {
-
-                        if (bIsZero) {
-                            els_[y][x].num_ = 0;
-                        }
-                    }
-                }
-            }
-
+            if (checkElem(i, j, x, y, bDebug, bIsFirst)) return true;
 
         }
     }
-    els_[i][j].col_ = color::black;
+    return false;
+}
+
+bool Field::traverseUpRight(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst)
+{
+    for (int y = bottom; y >= top; y--) {
+        for (int x = left; x <= right; x++) {
+
+            if (checkElem(i, j, x, y, bDebug, bIsFirst)) return true;
+
+        }
+    }
+    return false;
+}
+
+bool Field::traverseUpLeft(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst)
+{
+    for (int y = bottom; y >= top; y--) {
+        for (int x = right; x >= left; x--) {
+
+            if (checkElem(i, j, x, y, bDebug, bIsFirst)) return true;
+
+        }
+    }
     return false;
 }

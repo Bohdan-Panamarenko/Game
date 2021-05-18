@@ -15,22 +15,23 @@ class Field {
             num_ = 0;
             col_ = color::black;
         }
-        Elem(int num, color col) {
-            this->num_ = num;
-            this->col_ = col;
-        }
     };
     color colList_[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
 
     Elem els_[9][9];
-    int steps_;
     int colNum_;
+    bool checkElem(int i, int j, int x, int y, bool bDebug, bool bIsFirst);
+protected: 
+    bool (Field::*traversFunc_)(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
+
 public:
     Field();
     void show();
-    bool seekDownRight(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
-    bool seekDownLeft(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
-    bool seekUpRight(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
-    bool seekUpLeft(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
+    bool seek(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
+
+    bool traverseDownRight(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
+    bool traverseDownLeft(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
+    bool traverseUpRight(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
+    bool traverseUpLeft(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
 };
   
