@@ -16,7 +16,7 @@ class Field {
             col_ = color::black;
         }
     };
-    color colList_[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
+    const color colList_[7] = { color::black, color::blue, color::green, color::red, color::yellow, color::purple, color::skyBlue };
 
     Elem els_[9][9];
     int colNum_;
@@ -27,7 +27,7 @@ protected:
 public:
     Field();
     void show();
-    bool seek(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
+    bool build(int i = 0, int j = 0, bool bDebug = false, bool bIsFirst = true);
 
     bool traverseDownRight(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
     bool traverseDownLeft(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst);
