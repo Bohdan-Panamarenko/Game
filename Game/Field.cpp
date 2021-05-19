@@ -65,7 +65,7 @@ bool Field::checkElem(int i, int j, int x, int y, bool bDebug, bool bIsFirst)
 }
 
 bool Field::build(int i, int j, bool bDebug, bool bIsFirst) {
-    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false; // перевірка першого елементу
+    if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false; // перевірка початкового елементу
     if (els_[i][j].num_ == 9) { // цифра дев'ять завершає послідовність
         els_[i][j].col_ = colList_[colNum_];
         return true;
@@ -78,7 +78,7 @@ bool Field::build(int i, int j, bool bDebug, bool bIsFirst) {
         }
         else return true;
     }
-    int x = 0, y = 0, left, right, bottom, top;
+    int left, right, bottom, top;
     
 
     els_[i][j].col_ = colList_[colNum_]; // призначення кольору клітинці
