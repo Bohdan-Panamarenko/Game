@@ -3,7 +3,7 @@
 void FieldWorker::traverseDownRight() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek_)(i, j, bDebug_, true);
+			build(i, j, bDebug_, true);
 		}
 	}
 }
@@ -11,7 +11,7 @@ void FieldWorker::traverseDownRight() {
 void FieldWorker::traverseDownLeft() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek_)(i, j, bDebug_, true);
+			build(i, j, bDebug_, true);
 		}
 	}
 }
@@ -19,7 +19,7 @@ void FieldWorker::traverseDownLeft() {
 void FieldWorker::traverseUpRight() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek_)(i, j, bDebug_, true);
+			build(i, j, bDebug_, true);
 		}
 	}
 }
@@ -27,7 +27,7 @@ void FieldWorker::traverseUpRight() {
 void FieldWorker::traverseUpLeft() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek_)(i, j, bDebug_, true);
+			build(i, j, bDebug_, true);
 		}
 	}
 }
@@ -35,7 +35,7 @@ void FieldWorker::traverseUpLeft() {
 void FieldWorker::traverseRightDown() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek_)(j, i, bDebug_, true);
+			build(j, i, bDebug_, true);
 		}
 	}
 }
@@ -43,7 +43,7 @@ void FieldWorker::traverseRightDown() {
 void FieldWorker::traverseLeftDown() {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek_)(j, i, bDebug_, true);
+			build(j, i, bDebug_, true);
 		}
 	}
 }
@@ -51,7 +51,7 @@ void FieldWorker::traverseLeftDown() {
 void FieldWorker::traverseRightUp() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = 0; j < SIZE; j++) {
-			(this->*typeOfSeek_)(j, i, bDebug_, true);
+			build(j, i, bDebug_, true);
 		}
 	}
 }
@@ -59,14 +59,14 @@ void FieldWorker::traverseRightUp() {
 void FieldWorker::traverseLeftUp() {
 	for (int i = SIZE - 1; i >= 0; i--) {
 		for (int j = SIZE - 1; j >= 0; j--) {
-			(this->*typeOfSeek_)(j, i, bDebug_, true);
+			build(j, i, bDebug_, true);
 		}
 	}
 }
 
 void FieldWorker::settings() {
 	char answ = '\0';
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // отримуємо дескриптор вікна
 	SETCOLOR(color::green);
 	cout << "<---------- Налаштування ---------->" << endl;
 	SETCOLOR(color::black);
@@ -81,7 +81,7 @@ void FieldWorker::settings() {
 		if (trav != '1' && trav != '2') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	cout << "Виберіть спосіб обходу поля:" << endl;
 	cout << "1. Згори вниз і зліва направо" << endl;
@@ -95,10 +95,10 @@ void FieldWorker::settings() {
 		if (answ != '1' && answ != '2' && answ != '3' && answ != '4') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	if (trav == '1') {
-		switch (answ) {
+		switch (answ) { // перша група
 		case '2':
 			typeOfTraverse_ = &FieldWorker::traverseDownLeft;
 			break;
@@ -111,7 +111,7 @@ void FieldWorker::settings() {
 		}
 	}
 	else {
-		switch (answ) {
+		switch (answ) { // друга група
 		case '1':
 			typeOfTraverse_ = &FieldWorker::traverseRightDown;
 			break;
@@ -143,17 +143,17 @@ void FieldWorker::settings() {
 		if (answ != '1' && answ != '2' && answ != '3' && answ != '4') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	switch (answ) {
 	case '2':
-		typeOfSeek_ = &Field::seekDownLeft;
+		traversFunc_ = &Field::traverseDownLeft;
 		break;
 	case '3':
-		typeOfSeek_ = &Field::seekUpRight;
+		traversFunc_ = &Field::traverseUpRight;
 		break;
 	case '4':
-		typeOfSeek_ = &Field::seekUpLeft;
+		traversFunc_ = &Field::traverseUpLeft;
 		break;
 	}
 	cout << "\nУвімкнути режим ретельного огляду? (y - так, n - ні)" << endl;
@@ -166,7 +166,7 @@ void FieldWorker::settings() {
 		if (answ != 'y' && answ != 'n') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	if (answ == 'y') bDebug_ = true;
 	SETCOLOR(color::green);

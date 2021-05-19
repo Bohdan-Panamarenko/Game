@@ -7,7 +7,7 @@ int main()
     system("color F0");
     char answ = 'y';
     do {
-        FieldWorker A;
+        FieldWorker A; // об'єкт поля
         cout << "Початкове поле:" << endl;
         A.show();
         cout << "\nВиберіть дію: " << endl;
@@ -21,7 +21,7 @@ int main()
             if (answ != '1' && answ != '2' && answ != '3') {
                 cout << "**Некорректний ввід" << endl;
             }
-            else break;
+            else break; // якщо ввід вірний, виходимо з циклу
         } while (true);
         switch (answ) {
         case '1': 
@@ -35,7 +35,7 @@ int main()
             break;
         }
 
-        while (answ == '1') {
+        while (answ == '1') { // налаштування можна провести декілька разів
             cout << "\nВиберіть дію: " << endl;
             cout << "1. Налаштування обходу поля та алгоритму пошуку" << endl;
             cout << "2. Запустити вирішення головоломки з поточними налаштуваннями" << endl;
@@ -47,7 +47,7 @@ int main()
                 if (answ != '1' && answ != '2' && answ != '3') {
                     cout << "**Некорректний ввід" << endl;
                 }
-                else break;
+                else break; // якщо ввід вірний, виходимо з циклу
             } while (true);
             switch (answ) {
             case '1':
@@ -66,6 +66,6 @@ int main()
         cout << "Ваша відповідь: ";
         cin >> answ;
         while (cin.get() != '\n'); // очистка буфера
-        system("CLS");
+        system("CLS"); // очистка консолі
     } while (answ == 'y');
 }
