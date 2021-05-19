@@ -1,9 +1,9 @@
 #include "Field.h"
 
 Field::Field() {
-    colNum_ = 1;
-    traversFunc_ = &Field::traverseDownRight;
-    const int fld[9][9] = {
+    colNum_ = 1; // починаємо з синього кольору
+    traversFunc_ = &Field::traverseDownRight; // за замовчуванням використовується обхід згори-вниз і зліва-направо
+    const int fld[9][9] = { // початкове поле у вигляді двомірного масиву цілих чисел
     {1, 0, 6, 0, 0, 2, 0, 7, 0},
     {0, 9, 6, 6, 0, 3, 0, 5, 0},
     {4, 6, 7, 0, 8, 4, 9, 0, 0},
@@ -22,58 +22,57 @@ Field::Field() {
 }  
 
 void Field::show() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // отримуємо дескриптор вікна
     for (int i = 0, j = 0; i < 9; i++) {
         cout << ' ';
         for (j = 0; j < 9; j++) {
-            SETCOLOR(els_[i][j].col_);
+            SETCOLOR(els_[i][j].col_); // змінюємо колір перед виводом кожного символу
             cout << els_[i][j].num_ << ' ';
         }
         cout << endl;
     }
-    SETCOLOR(color::black);
+    SETCOLOR(color::black); // після завершення виводу змінюємо колір на чорний
     cout << '<';
-    for (int n = 0; n < 17; n++) cout << '-';
+    for (int n = 0; n < 17; n++) cout << '-'; // виводимо роздільну лінію
     cout << '>';
     cout << endl;
 }
 
 bool Field::checkElem(int i, int j, int x, int y, bool bDebug, bool bIsFirst)
 {
-    bool bIsZero = false;
-    //if (els_[y][j].col_ != els_[i][x].col_) { // проверка на перпендикулярное пересечение
-    if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // проверка на перпендикулярное пересечение
-        if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) {
-            if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1;
-            if (build(y, x, bDebug, false)) {
-                if (!bIsFirst) return true;
-                else {    // если по элементу было сформировано цепочку
+    bool bIsZero = false; // чи був елемент нулем
+    if (els_[y][j].col_ == color::black || els_[i][x].col_ == color::black) { // перевірка на перпендикулярний перетин
+        if (els_[y][x].col_ == color::black && (els_[y][x].num_ == els_[i][j].num_ + 1 || (bIsZero = (els_[y][x].num_ == 0)))) { // перевірка кандидата
+            if (bIsZero) els_[y][x].num_ = els_[i][j].num_ + 1; // якщо кандидат містить число 0, то змінюємо його на необхідне
+            if (build(y, x, bDebug, false)) { // якщо знайдено наступний елемент
+                if (!bIsFirst) return true; // і це не початковий елемент, то повертаємо true
+                else {    // і це перший елемент, то послідовність побудовано
                     show();
-                    if (bDebug) system("pause>nul");
+                    if (bDebug) system("pause>nul"); // режим ретельного огляду
                     colNum_++;
                     return true;
                 }
             }
             else {
 
-                if (bIsZero) {
+                if (bIsZero) { // якщо послідовність не побудовано і елемент був нулем, то повертаємо йому значення
                     els_[y][x].num_ = 0;
                 }
             }
         }
     }
-    return false;
+    return false; // якщо наступний елемент не знайдено, повертаємо false
 }
 
 bool Field::build(int i, int j, bool bDebug, bool bIsFirst) {
     if (bIsFirst && els_[i][j].num_ != 1 && els_[i][j].num_ != 0) return false; // перевірка першого елементу
-    if (els_[i][j].num_ == 9) { // цифра девять завершает цепочку
+    if (els_[i][j].num_ == 9) { // цифра дев'ять завершає послідовність
         els_[i][j].col_ = colList_[colNum_];
         return true;
     }
-    if (els_[i][j].num_ == 0) { // если начальный элемент равняется нулю, то изменяем его на единицу
+    if (bIsFirst && els_[i][j].num_ == 0) { // якщо початковий елемент дорівнює нулю, то змінюємо його на одиницю
         els_[i][j].num_ = 1;
-        if (!build(i, j, bDebug)) { // если цепочка не была сформирована, возвращаем как было
+        if (!build(i, j, bDebug)) { // якщо послідовність не було сформовано, повертаємо як було
             els_[i][j].num_ = 0;
             return false;
         }
@@ -83,10 +82,10 @@ bool Field::build(int i, int j, bool bDebug, bool bIsFirst) {
     
 
     els_[i][j].col_ = colList_[colNum_]; // призначення кольору клітинці
-    // размечаем границы для поиска следующего элемента в цепочке
 
-    if (bDebug) show();
+    if (bDebug) show(); // режим ретельного огляду
 
+    // розмітка границь дельта-поля
     if (i == 0) {
         top = 0;
         bottom = 1;
@@ -113,11 +112,11 @@ bool Field::build(int i, int j, bool bDebug, bool bIsFirst) {
         right = j + 1;
     }
 
-    // поиск следующего элемента в выделенной области
+    // пошук наступного елементу в дельта-полі
     if ((this->*traversFunc_)(i, j, top, bottom, left, right, bDebug, bIsFirst)) return true; // обхід дельта-поля
 
     els_[i][j].col_ = color::black; // відміна кольорку, якщо не було побудовано послідовність
-    return false;
+    return false; // повертаємо false, якщо не було побудовано послідовність
 }
 
 bool Field::traverseDownRight(int i, int j, int top, int bottom, int left, int right, bool bDebug, bool bIsFirst)

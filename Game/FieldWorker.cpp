@@ -66,7 +66,7 @@ void FieldWorker::traverseLeftUp() {
 
 void FieldWorker::settings() {
 	char answ = '\0';
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // отримуємо дескриптор вікна
 	SETCOLOR(color::green);
 	cout << "<---------- Налаштування ---------->" << endl;
 	SETCOLOR(color::black);
@@ -81,7 +81,7 @@ void FieldWorker::settings() {
 		if (trav != '1' && trav != '2') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	cout << "Виберіть спосіб обходу поля:" << endl;
 	cout << "1. Згори вниз і зліва направо" << endl;
@@ -95,10 +95,10 @@ void FieldWorker::settings() {
 		if (answ != '1' && answ != '2' && answ != '3' && answ != '4') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	if (trav == '1') {
-		switch (answ) {
+		switch (answ) { // перша група
 		case '2':
 			typeOfTraverse_ = &FieldWorker::traverseDownLeft;
 			break;
@@ -111,7 +111,7 @@ void FieldWorker::settings() {
 		}
 	}
 	else {
-		switch (answ) {
+		switch (answ) { // друга група
 		case '1':
 			typeOfTraverse_ = &FieldWorker::traverseRightDown;
 			break;
@@ -143,7 +143,7 @@ void FieldWorker::settings() {
 		if (answ != '1' && answ != '2' && answ != '3' && answ != '4') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	switch (answ) {
 	case '2':
@@ -166,7 +166,7 @@ void FieldWorker::settings() {
 		if (answ != 'y' && answ != 'n') {
 			cout << "**Некорректний ввід" << endl;
 		}
-		else break;
+		else break; // якщо ввід вірний, виходимо з циклу
 	} while (true);
 	if (answ == 'y') bDebug_ = true;
 	SETCOLOR(color::green);
