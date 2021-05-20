@@ -33,33 +33,33 @@ void FieldWorker::traverseUpLeft() {
 }
 
 void FieldWorker::traverseRightDown() {
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			build(j, i, bDebug_, true);
+	for (int j = 0; j < SIZE; j++) {
+		for (int i = 0; i < SIZE; i++) {
+			build(i, j, bDebug_, true);
 		}
 	}
 }
 
 void FieldWorker::traverseLeftDown() {
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = SIZE - 1; j >= 0; j--) {
-			build(j, i, bDebug_, true);
+	for (int j = SIZE - 1; j >= 0; j--) {
+		for (int i = 0; i < SIZE; i++) {
+			build(i, j, bDebug_, true);
 		}
 	}
 }
 
 void FieldWorker::traverseRightUp() {
-	for (int i = SIZE - 1; i >= 0; i--) {
-		for (int j = 0; j < SIZE; j++) {
-			build(j, i, bDebug_, true);
+	for (int j = 0; j < SIZE; j++) {
+		for (int i = SIZE - 1; i >= 0; i--) {
+			build(i, j, bDebug_, true);
 		}
 	}
 }
 
 void FieldWorker::traverseLeftUp() {
-	for (int i = SIZE - 1; i >= 0; i--) {
-		for (int j = SIZE - 1; j >= 0; j--) {
-			build(j, i, bDebug_, true);
+	for (int j = SIZE - 1; j >= 0; j--) {
+		for (int i = SIZE - 1; i >= 0; i--) {
+			build(i, j, bDebug_, true);
 		}
 	}
 }
